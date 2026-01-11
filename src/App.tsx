@@ -1,9 +1,7 @@
 import { useEffect } from "react";
 import { open } from "@tauri-apps/plugin-dialog";
-import { Header } from "@/components/layout/Header";
-import { Sidebar } from "@/components/layout/Sidebar";
-import { StatusBar } from "@/components/layout/StatusBar";
 import { Graph3D } from "@/components/graph/Graph3D";
+import { FloatingUI } from "@/components/layout/FloatingUI";
 import { useProjectStore } from "@/store/projectStore";
 import { useGraphStore } from "@/store/graphStore";
 import tauriCommands from "@/lib/tauri";
@@ -19,49 +17,41 @@ function App() {
 
   const { setGraph } = useGraphStore();
 
-  // Load available parsers on mount
   useEffect(() => {
     tauriCommands.listParsers().then(setParsers).catch(console.error);
   }, [setParsers]);
 
+  useEffect(() => {
+    document.documentElement.classList.add("dark");
+  }, []);
+
   const handleOpenProject = async () => {
     try {
-      console.log("Opening folder dialog...");
       const selected = await open({
         directory: true,
         multiple: false,
         title: "Select Project Directory",
       });
 
-      console.log("Selected:", selected);
-
       if (selected && typeof selected === "string") {
         setProjectPath(selected);
         setScanning(true);
 
-        // Detect project type
-        console.log("Detecting project type...");
         const detection = await tauriCommands.detectProjectType(selected);
-        console.log("Detection result:", detection);
         setDetection(detection);
 
-        // Scan directory
-        console.log("Scanning directory...");
         const files = await tauriCommands.scanDirectory(
           selected,
           detection.parser_id
         );
-        console.log("Scanned files:", files.length);
         setScannedFiles(files);
 
-        // Create a simple graph from scanned files for now
-        // Use deterministic positions based on index for stability
+        const nodeCount = Math.min(files.length, 200);
         const simpleGraph = {
           nodes: files.slice(0, 200).map((file, index) => {
-            // Create a grid-like layout
-            const cols = Math.ceil(Math.sqrt(files.length));
-            const row = Math.floor(index / cols);
-            const col = index % cols;
+            const phi = Math.acos(-1 + (2 * index) / nodeCount);
+            const theta = Math.sqrt(nodeCount * Math.PI) * phi;
+            const radius = 30 + Math.random() * 10;
 
             return {
               id: `file-${index}`,
@@ -73,16 +63,16 @@ function App() {
               language: detection.parser_id,
               file_path: file.path,
               position: {
-                x: (col - cols / 2) * 3,
-                y: (row - Math.ceil(files.length / cols) / 2) * 3,
-                z: (Math.random() - 0.5) * 5,
+                x: radius * Math.cos(theta) * Math.sin(phi),
+                y: radius * Math.sin(theta) * Math.sin(phi),
+                z: radius * Math.cos(phi),
               },
               metadata: {
                 size_bytes: file.size_bytes,
               },
             };
           }),
-          edges: [],
+          edges: generateEdges(files.slice(0, 200)),
           metadata: {
             project_name: selected.split("/").pop() ?? "Project",
             root_path: selected,
@@ -92,7 +82,6 @@ function App() {
           },
         };
 
-        console.log("Setting graph with", simpleGraph.nodes.length, "nodes");
         setGraph(simpleGraph);
         setScanning(false);
       }
@@ -103,13 +92,9 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-background">
-      <Header />
-      <div className="flex flex-1 overflow-hidden">
-        <Sidebar onOpenProject={handleOpenProject} />
-        <Graph3D />
-      </div>
-      <StatusBar />
+    <div className="relative w-screen h-screen overflow-hidden bg-black">
+      <Graph3D className="absolute inset-0" />
+      <FloatingUI onOpenProject={handleOpenProject} />
     </div>
   );
 }
@@ -127,6 +112,38 @@ function getNodeTypeFromExtension(ext: string): "module" | "form" | "source_file
     jsx: "component",
   };
   return mapping[ext.toLowerCase()] ?? "source_file";
+}
+
+function generateEdges(files: Array<{ path: string; name: string }>) {
+  const edges: Array<{
+    id: string;
+    source: string;
+    target: string;
+    edge_type: "references" | { custom: string };
+    weight: number;
+    bidirectional: boolean;
+    metadata: Record<string, unknown>;
+  }> = [];
+
+  for (let i = 0; i < files.length; i++) {
+    const dir1 = files[i].path.split("/").slice(0, -1).join("/");
+    for (let j = i + 1; j < Math.min(i + 10, files.length); j++) {
+      const dir2 = files[j].path.split("/").slice(0, -1).join("/");
+      if (dir1 === dir2) {
+        edges.push({
+          id: `edge-${i}-${j}`,
+          source: `file-${i}`,
+          target: `file-${j}`,
+          edge_type: { custom: "same_directory" },
+          weight: 1,
+          bidirectional: true,
+          metadata: {},
+        });
+      }
+    }
+  }
+
+  return edges;
 }
 
 export default App;

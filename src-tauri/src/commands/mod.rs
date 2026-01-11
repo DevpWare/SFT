@@ -1,5 +1,3 @@
-// Tauri IPC Commands
-
 use std::path::Path;
 
 use crate::core::{DetectionResult, ParserInfo, ParserRegistry, ProjectDetector, PARSER_REGISTRY};

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 324.09 74.78">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #fff;
+      }
+
+      .cls-3 {
+        fill: #0087b1;
+      }
+
+      .cls-4 {
+        fill: url(#Degradado_sin_nombre_692);
+      }
+
+      .cls-5 {
+        letter-spacing: 0em;
+      }
+
+      .cls-6 {
+        fill: url(#Degradado_sin_nombre_710);
+      }
+
+      .cls-2 {
+        font-family: Rubik-Bold, Rubik;
+        font-size: 48px;
+        font-weight: 700;
+      }
+
+      .cls-7 {
+        letter-spacing: -.02em;
+      }
+    </style>
+    <linearGradient id="Degradado_sin_nombre_692" data-name="Degradado sin nombre 692" x1="5.38" y1="50.57" x2="31.48" y2="30.47" gradientUnits="userSpaceOnUse">
+      <stop offset=".03" stop-color="#7bc7c6"/>
+      <stop offset=".33" stop-color="#56c0d9"/>
+      <stop offset=".76" stop-color="#0087b0"/>
+    </linearGradient>
+    <radialGradient id="Degradado_sin_nombre_710" data-name="Degradado sin nombre 710" cx="6.96" cy="-2.22" fx="6.96" fy="-2.22" r="72.6" gradientUnits="userSpaceOnUse">
+      <stop offset=".57" stop-color="#fff"/>
+      <stop offset=".71" stop-color="#96d1ce"/>
+      <stop offset=".79" stop-color="#5eb9c0"/>
+      <stop offset=".95" stop-color="#0085b2"/>
+    </radialGradient>
+  </defs>
+  <g id="Capa_1-2" data-name="Capa 1">
+    <text class="cls-2" transform="translate(93.17 50.45)"><tspan x="0" y="0">D</tspan><tspan class="cls-7" x="34.37" y="0">e</tspan><tspan x="61.92" y="0">v</tspan><tspan class="cls-7" x="90.48" y="0">W</tspan><tspan x="129.41" y="0">a</tspan><tspan class="cls-5" x="157.73" y="0">r</tspan><tspan x="179.33" y="0">e</tspan></text>
+    <g>
+      <circle class="cls-3" cx="34.01" cy="25.13" r="2.53"/>
+      <path class="cls-4" d="m.16,61.12c2.67-2.58,5.33-5.15,8-7.73v-7.99l5.86-5.33h6.05l12.88-12.8-1.33-1.33-12.26,12.53h-6.13L0,48.18v13.07l.16-.13Z"/>
+      <path class="cls-6" d="m11.75,32.19V12.9h18.6s16.05,1.7,16.05,17.96-12.53,21.43-18.13,21.51-13.35,0-13.35,0l-.11-1.65,4.8-4.53h5.86l10.66-10.66-1.34-1.07-10.12,9.86h-5.6l-5.86,5.6v3.2l-9.33,9.33h27.6s24.91-1.07,27.58-29.86c0,0,1.6-27.83-27.59-30.18H0v38.21l11.75-8.43Z"/>
+      <circle class="cls-3" cx="37.05" cy="33.52" r="2.53"/>
+    </g>
+    <path class="cls-1" d="m74.9,2.41v60.03c0,3.22,5,3.22,5,0V2.41c0-3.22-5-3.22-5,0h0Z"/>
+  </g>
+</svg>
